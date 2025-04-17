@@ -44,6 +44,8 @@ async function bootstrap() {
  
 
   app.useGlobalFilters(new MongooseExceptionFilter());
-  await app.listen(appConfig?.port || 5000);
+  const port=appConfig?.port || 9000
+  await app.listen(port);
+  console.log(`Application is running on: http://localhost:${port}`);
 }
 bootstrap();
