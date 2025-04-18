@@ -17,7 +17,6 @@ export class AuthController {
         httpOnly: true,
         secure: true,
         sameSite: 'none',
-        domain: 'stockclampbackend-production.up.railway.app',
       })
   
       // Add security headers
@@ -41,7 +40,6 @@ export class AuthController {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
-      domain: 'stockclampbackend-production.up.railway.app',
     })
 
     // Add security headers
