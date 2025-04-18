@@ -12,9 +12,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       jwtFromRequest: ExtractJwt.fromExtractors([
         (req: Request) => {
           let token = null;
-          if (req && req.cookies) {
-            token = req.cookies['access_token']; // ดึง token จาก cookie
+          if (req && req.signedCookies) {
+            token = req.signedCookies?.['access_token']
           }
+          // if (req && req.cookies) {
+          //   token = req.cookies['access_token']; // ดึง token จาก cookie
+          // }
           return token;
         },
         ExtractJwt.fromAuthHeaderAsBearerToken(), // fallback ถ้าไม่เจอใน cookie จะดูใน Header แทน
