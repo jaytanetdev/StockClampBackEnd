@@ -16,9 +16,7 @@ export class AuthController {
       res.cookie('access_token', accessToken,{
         httpOnly: true,
         secure: true,
-        sameSite: 'lax',
-        signed: true,
-        path: '/api', // Restrict cookie to API paths
+        sameSite: 'none',
         domain: 'stockclampbackend-production.up.railway.app',
       })
   
@@ -42,9 +40,7 @@ export class AuthController {
     res.cookie('access_token', accessToken,{
       httpOnly: true,
       secure: true,
-      sameSite: 'lax',
-      signed: true,
-      path: '/api', // Restrict cookie to API paths
+      sameSite: 'none',
       domain: 'stockclampbackend-production.up.railway.app',
     })
 
