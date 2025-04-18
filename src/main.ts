@@ -28,7 +28,7 @@ async function bootstrap() {
     defaultVersion: '1',
   });
 
-  app.use(cookieParser('SUPER_KEY'));
+  app.use(cookieParser('JJSECRET'));
   const config = new DocumentBuilder()
     .setTitle('STOCK CLAMP')
     .setDescription('-')
