@@ -11,18 +11,21 @@ export class AuthController {
   @Get('login')
   async login(@Request() req, @Res() res: Response) {
     const { accessToken } = await this.authService.login(req);
-  res.cookie('access_token', accessToken,{
-      httpOnly: true,
-      secure: true,
-      sameSite: 'none',
-      signed: true,
-      path: '/', 
-    })
-
-    // Add security headers
-    res.setHeader('X-Content-Type-Options', 'nosniff')
-    res.setHeader('X-Frame-Options', 'DENY')
-    res.setHeader('X-XSS-Protection', '1; mode=block')
+  
+      //* Set secure cookie, no user information included
+      res.cookie('access_token', accessToken,{
+        httpOnly: true,
+        secure: true,
+        sameSite: 'lax',
+        signed: true,
+        path: '/api', // Restrict cookie to API paths
+        domain: 'stockclampbackend-production.up.railway.app',
+      })
+  
+      // Add security headers
+      res.setHeader('X-Content-Type-Options', 'nosniff')
+      res.setHeader('X-Frame-Options', 'DENY')
+      res.setHeader('X-XSS-Protection', '1; mode=block')
     return res.json({ message: 'login success' ,token:accessToken});
   }
 
@@ -34,13 +37,15 @@ export class AuthController {
   @Get('google/callback')
   @UseGuards(GoogleAuthGuard)
   async googleAuthRedirect(@Request() req, @Res() res: Response) {
+    console.log(123)
     const { accessToken } = await this.authService.googleLogin(req);
     res.cookie('access_token', accessToken,{
       httpOnly: true,
       secure: true,
-      sameSite: 'none',
+      sameSite: 'lax',
       signed: true,
-      path: '/', 
+      path: '/api', // Restrict cookie to API paths
+      domain: 'stockclampbackend-production.up.railway.app',
     })
 
     // Add security headers
