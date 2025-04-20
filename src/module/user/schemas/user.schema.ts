@@ -23,6 +23,9 @@ export class User {
   souce: string;
 
   @Prop()
+  picture: string;
+
+  @Prop()
   googleId: string;
 
   @Prop({ default: true })

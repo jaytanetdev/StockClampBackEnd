@@ -24,8 +24,8 @@ export class AuthService {
     if (!req.user) {
       throw new Error('Google login failed: No user information received.');
     }
+    
     const { email, name, picture, googleId } = req.user;
-    console.log(name)
     const arrayName = name.split(' ');
     let user = await this.userModel.findOne({ email });
     if (!user) {

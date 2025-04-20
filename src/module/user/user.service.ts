@@ -29,6 +29,7 @@ export class UserService {
         email: res.email,
         firstName: res.firstName,
         lastName: res.lastName,
+        picture: res.picture,
       },
     };
   }

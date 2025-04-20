@@ -32,6 +32,13 @@ export class GetUserResultDto {
   })
   @Expose()
   lastName: String;
+  
+  @ApiProperty({
+    example: 'lastname',
+    type: String,
+  })
+  @Expose()
+  picture: String;
 }
 
 export class GetUserResponseDto extends BaseResponse {
