@@ -24,7 +24,7 @@ export class ModelService {
   async findByMaterialId(materialId: string): Promise<GetModelResponseDto> {
     const result = (await this.ModelModel.find({
       materialId: new Types.ObjectId(materialId),
-    }).lean()) as unknown as GetModelResultDto[];
+    }).sort({_id:1}).lean()) as unknown as GetModelResultDto[];
 
     return {
       success: true,

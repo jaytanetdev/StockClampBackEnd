@@ -30,7 +30,7 @@ export class OptionService {
 
     const result = (await this.OptionModel.find({
       modelId: new Types.ObjectId(modelId),
-    }).populate('modelId')) as unknown as GetOptionResultDto[];
+    }).sort({_id:1}).populate('modelId')) as unknown as GetOptionResultDto[];
 
     return {
       success: true,

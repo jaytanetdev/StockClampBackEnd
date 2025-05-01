@@ -25,7 +25,7 @@ export class MaterialService {
   }
   async findAll(): Promise<GetMaterialResponseDto> {
     const result =
-      (await this.MaterialModel.find().lean()) as unknown as GetMaterialResultDto[];
+      (await this.MaterialModel.find().sort({_id:1}).lean()) as unknown as GetMaterialResultDto[];
 
     return {
       success: true,

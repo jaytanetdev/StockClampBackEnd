@@ -10,7 +10,10 @@ import { Product, ProductDocument } from './schemas/product.schema';
 import { Model, Types } from 'mongoose';
 import { GetProductResponseDto } from './dto/get-product.dto';
 import { plainToInstance } from 'class-transformer';
-import { GetProductBaseResponseDto, ProductResultGetDto } from './dto/get-product-base.dto';
+import {
+  GetProductBaseResponseDto,
+  ProductResultGetDto,
+} from './dto/get-product-base.dto';
 
 @Injectable()
 export class ProductService {
@@ -43,19 +46,20 @@ export class ProductService {
     };
   }
 
-// product.service.ts
-async findByOptionId(optionId: string): Promise<GetProductBaseResponseDto> {
-  const result = await this.ProductModel.find({
-    optionId: new Types.ObjectId(optionId),
-  }).populate('optionId').lean() as unknown as ProductResultGetDto[]
+  // product.service.ts
+  async findByOptionId(optionId: string): Promise<GetProductBaseResponseDto> {
+    const result = (await this.ProductModel.find({
+      optionId: new Types.ObjectId(optionId),
+    })
+      .populate('optionId')
+      .sort({ group: 1 ,_id:1})
+      .lean()) as unknown as ProductResultGetDto[];
 
-  return new GetProductBaseResponseDto({
-    success: true,
-    result,
-  });
-}
-
-  
+    return new GetProductBaseResponseDto({
+      success: true,
+      result,
+    });
+  }
 
   async findAll(
     page: number,
