@@ -1,50 +1,42 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
+import { OrderItem, OrderItemSchema } from './order-item.schema';
 export type OrderDocument = Order & Document;
 
-@Schema()
+@Schema({ timestamps: true })
 export class Order {
   @Prop({ required: true })
-  amount: number;
+  platform: string;
 
-  @Prop({required:true})
-  status: string;
+  @Prop()
+  tax: number;
 
-  @Prop({ type: Types.ObjectId, ref: 'Product', required: true })
-  productId: Types.ObjectId;
-
-  @Prop({required:true})
-  cost: number;
-
-  @Prop({required:true})
-  sellingPrice: number;
-
-  @Prop({required:true})
+  @Prop({ required: true })
   expenses: number;
 
-  @Prop({required:true})
-  profit: number;
+  @Prop()
+  total: number;
+
+  @Prop()
+  totalExpenses: number;
+
+  @Prop()
+  profitNet: string;
+
+  @Prop({ required: true })
+  status: string;
+
+  @Prop({ type: [OrderItemSchema], default: [] }) 
+  orderList: OrderItem[];
 
   @Prop({ default: true })
   active: boolean;
 
-  @Prop({ type: Date, default: Date.now })
-  createAt: Date;
+  @Prop({ type: Types.ObjectId, ref: 'User' })
+  createBy: Types.ObjectId;
 
-
-  @Prop({ type: Types.ObjectId, ref: 'User'})
-  createBy: Types.ObjectId; 
-
-  @Prop()
-  updateAt: Date;
-
-  @Prop({ type: Types.ObjectId, ref: 'User'})
-  updateBy: Types.ObjectId; 
+  @Prop({ type: Types.ObjectId, ref: 'User' })
+  updateBy: Types.ObjectId;
 }
 
 export const OrderSchema = SchemaFactory.createForClass(Order);
-
-OrderSchema.pre(['findOneAndUpdate', 'updateOne'], function (next) {
-  this.set({ updatedAt: new Date() });
-  next();
-});

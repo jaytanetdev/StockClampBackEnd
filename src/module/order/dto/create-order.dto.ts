@@ -1,25 +1,83 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import {
+  IsArray,
+  IsBoolean,
+  IsEnum,
+  IsMongoId,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 export enum StatusEnum {
   OPEN = 'OPEN',
   FINISH = 'FINISH',
   CANCEL = 'CANCEL',
 }
-
-import { Types } from 'mongoose';
-export class CreateOrderDto {
-  @ApiProperty({
-    example: '67fd49bb8f69c035eda499d9',
-  })
+export class OrderItemDto {
+  @ApiProperty({ example: '67fd49bb8f69c035eda499d9' })
   @IsNotEmpty()
-  productId: Types.ObjectId;
+  @IsMongoId()
+  productId: string;
 
-  @ApiProperty({
-    example: 10,
-  })
+  @ApiProperty()
+  @IsString()
+  productName: string;
+
+  @ApiProperty()
+  @Transform(({ value }) => parseFloat(value?.toString().replace(/,/g, '')))
+  @IsNumber()
+  amount: number;
+
+  @ApiProperty()
+  @Transform(({ value }) => parseFloat(value?.toString().replace(/,/g, '')))
+  @IsNumber()
+  costEA: number;
+
+  @ApiProperty()
+  @Transform(({ value }) => parseFloat(value?.toString().replace(/,/g, '')))
+  @IsNumber()
+  sellingPriceEA: number;
+
+  @ApiProperty()
+  @Transform(({ value }) => parseFloat(value?.toString().replace(/,/g, '')))
+  @IsNumber()
+  sellingPriceNet: number;
+}
+
+export class CreateOrderDto {
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  platform: string;
+  @ApiProperty()
+  @Transform(({ value }) => parseFloat(value?.toString().replace(/,/g, '')))
+  @IsNumber()
+  tax: number;
+
+  @ApiProperty()
+  @Transform(({ value }) => parseFloat(value?.toString().replace(/,/g, '')))
+  @IsNumber()
+  expenses: number;
+
+  @ApiProperty()
+  @Transform(({ value }) => parseFloat(value?.toString().replace(/,/g, '')))
   @IsNumber()
   @IsNotEmpty()
-  amount: number;
+  total: number;
+
+  @ApiProperty()
+  @Transform(({ value }) => parseFloat(value?.toString().replace(/,/g, '')))
+  @IsNumber()
+  @IsNotEmpty()
+  totalExpenses: number;
+
+  @ApiProperty()
+  @Transform(({ value }) => parseFloat(value?.toString().replace(/,/g, '')))
+  @IsNumber()
+  @IsNotEmpty()
+  profitNet: number;
 
   @ApiProperty({
     example: StatusEnum.OPEN,
@@ -29,31 +87,13 @@ export class CreateOrderDto {
   @IsNotEmpty()
   status: StatusEnum;
 
-  @ApiProperty({
-    example: 5000,
-  })
-  @IsNumber()
-  @IsNotEmpty()
-  cost: number;
+  @ApiProperty({ type: [OrderItemDto] })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => OrderItemDto)
+  orderList: OrderItemDto[];
 
-  @ApiProperty({
-    example: 10000,
-  })
-  @IsNumber()
-  @IsNotEmpty()
-  sellingPrice: number;
-
-  @ApiProperty({
-    example: 50,
-  })
-  @IsNumber()
-  @IsNotEmpty()
-  expenses: number;
-
-  @ApiProperty({
-    example: 5000,
-  })
-  @IsNumber()
-  @IsNotEmpty()
-  profit: number;
+  @ApiProperty()
+  @IsBoolean()
+  active: boolean;
 }

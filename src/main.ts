@@ -5,7 +5,7 @@ import { TAppConfig } from './config/app.config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { MongooseExceptionFilter } from './common/mongoose-exception.filter';
 import * as cookieParser from 'cookie-parser';
-import { VersioningType } from '@nestjs/common';
+import { ValidationPipe, VersioningType } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -41,6 +41,13 @@ async function bootstrap() {
     jsonDocumentUrl: 'doc-json',
   });
 
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true, // ✅ ต้องเปิดตรงนี้
+      whitelist: true,
+      forbidNonWhitelisted: true,
+    }),
+  );
   app.useGlobalFilters(new MongooseExceptionFilter());
   const port = process.env.PORT || 5000;
   await app.listen(port, '0.0.0.0');

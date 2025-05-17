@@ -16,9 +16,17 @@ export class OrderService {
   ) {}
 
   async create(dto: CreateOrderDto, user: any): Promise<OrderDocument> {
+    const orderList = dto.orderList.map((item) => ({
+      productId: new Types.ObjectId(item.productId),
+      productName: item.productName,
+      amount: item.amount,
+      costEA: item.costEA,
+      sellingPriceEA: item.sellingPriceEA,
+      sellingPriceNet: item.sellingPriceNet,
+    }));
     const newOrder = new this.OrderModel({
       ...dto,
-      productId: new Types.ObjectId(dto.productId),
+      orderList,
       createBy: user.userId,
     });
     const response = await newOrder.save();
